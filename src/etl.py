@@ -24,7 +24,6 @@ def extract(data_path: Path) -> pd.DataFrame:
 
 def tranform(df: pd.DataFrame) -> pd.DataFrame: 
     try:
-        df["TotalCharges"] = pd.to_numeric(df["TotalCharges"])
         df["TotalCharges"] = df["TotalCharges"].fillna(0)
         logger.info("Data Transformed successfully.")
         return df
@@ -35,7 +34,7 @@ def tranform(df: pd.DataFrame) -> pd.DataFrame:
 
 def load(table_name: str, df: pd.DataFrame, db_manager: DatabaseManager) -> None:
     try:
-        sql_cols = [(col, sqlite3_dtype_map(dtype)) for col, dtype in df.dtypes.items()]
+        sql_cols = [(col, sqlite3_dtype_map(str(dtype))) for col, dtype in df.dtypes.items()]
         db_manager.create_table(table_name, sql_cols)
         db_manager.insert_data(df, table_name)
         logger.info("Data has been loaded to the database successfully.")

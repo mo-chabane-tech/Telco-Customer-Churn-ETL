@@ -11,8 +11,8 @@ logger = logging.getLogger(__name__)
 
 def plot_churn_by_contract(df: pd.DataFrame, config: Dict[str, Any]) -> None:
     try:
-        plt.figure(figsize=(10, 6))
-        sns.barplot(x='Contract', y='Churn_Percentage', data=df, palette='viridis')
+        plt.figure(figsize=(10, 8))
+        sns.barplot(x='Contract', y='Churned_Percentage', data=df)
         
         plt.title('Churn Percentage by Contract Type')
         plt.ylabel('Churn Percentage (%)')
@@ -26,10 +26,10 @@ def plot_churn_by_contract(df: pd.DataFrame, config: Dict[str, Any]) -> None:
         logger.error(f"Error generating churn plot: {e}")
         raise
 
-def plot_charges_scatter(df: pd.DataFrame, config: Dict[str, Any]) -> None:
+def plot_charges_kde(df: pd.DataFrame, config: Dict[str, Any]) -> None:
     try:
-        plt.figure(figsize=(10, 6))
-        sns.scatterplot(data=df, x='tenure', y='MonthlyCharges', hue='Churn', alpha=0.6)
+        plt.figure(figsize=(10, 8))
+        sns.kdeplot(data=df, x='tenure', y='MonthlyCharges', hue='Churn', alpha=0.8)
 
         plt.xlabel('Tenure (Months)')
         plt.ylabel('Monthly Charges ($)')
@@ -40,5 +40,5 @@ def plot_charges_scatter(df: pd.DataFrame, config: Dict[str, Any]) -> None:
         logger.info(f"Saved churn analysis plot at {save_path}")
 
     except Exception as e:
-        logger.error(f"Error generating scatter plot: {e}")
+        logger.error(f"Error generating kde plot: {e}")
         raise

@@ -6,7 +6,7 @@ from pathlib import Path
 
 def setup_logger(config: Dict[str, Any]) -> None:
     try:
-        log_path: Path = config["paths"]["logs_file"]
+        log_path: Path = Path(config["paths"]["logs_file"])
         ensure_dir(log_path.parent)
         logging.config.dictConfig(config["logging"])
         logging.info("Logger configured successfully.")

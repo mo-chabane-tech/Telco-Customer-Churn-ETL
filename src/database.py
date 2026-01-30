@@ -36,11 +36,13 @@ class DatabaseManager():
         self.check_connection()
 
         cols_def = ", ".join([f"{col} {dtype}" for col, dtype in columns])
-        query = f"delete if exists {table_name}; create table {table_name}({cols_def});"
+        table_deletion_query = f"drop table if exists {table_name};"
+        table_creation_query = f"create table {table_name}({cols_def});"
 
         try:
             cursor = self.conn.cursor()
-            cursor.execute(query)
+            cursor.execute(table_deletion_query)
+            cursor.execute(table_creation_query)
             self.conn.commit()
             logger.info(f"Table {table_name} has been created successfully.")
 
@@ -53,7 +55,8 @@ class DatabaseManager():
 
         try:
             df.to_sql(table_name, self.conn, if_exists="append", index=False)
-            logger.info(f"{len(df)} rows have been inserted to database.")
+            self.conn.commit()
+            logger.info(f"{len(df)} rows have been inserted into {table_name}")
 
         except sqlite3.Error as e:
             logger.error(f"Error inserting data to database: {e}")
