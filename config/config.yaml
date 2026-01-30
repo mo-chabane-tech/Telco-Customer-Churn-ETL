@@ -1,0 +1,34 @@
+project:
+  name: "Telco Customer Churn"
+
+paths:
+  reports_dir: "reports"
+  database: "sql/database.db"
+  logs_file: "logs/app.log"
+  data: "data/WA_Fn-UseC_-Telco-Customer-Churn.csv"
+
+logging:
+  version: 1
+  disable_existing_loggers: False
+  formatters:
+    standard:
+      format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+
+  handlers:
+    console:
+      level: INFO
+      class: logging.StreamHandler
+      formatter: standard
+    
+    file:
+      level: DEBUG
+      class: logging.FileHandler
+      formatter: standard
+      filename: logs/app.log
+  
+  root:
+    level: INFO
+    handlers: [console, file]
+
+tables:
+  table_name: "Telco_Customer_Churn"
