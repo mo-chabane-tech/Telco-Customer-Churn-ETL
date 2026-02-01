@@ -102,3 +102,22 @@ def plot_payment_method(df: pd.DataFrame, config: Dict[str, Any]) -> None:
     except Exception as e:
         logger.error(f"Error generating payment method plot: {e}")
         raise
+
+def plot_tech_support_impact(df: pd.DataFrame, config: Dict[str, Any]) -> None:
+    try:
+        plt.figure(figsize=(10, 8))
+        sns.barplot(x='TechSupport', y='Churn_Rate', data=df)
+
+        plt.title('Impact of Tech Support on Churn Rate')
+        plt.ylabel('Churn Rate (%)')
+        plt.xlabel('Tech Support Status')
+        plt.ylim(0, 100)
+        plt.tight_layout()
+
+        save_path = Path(config['paths']['reports_dir']) / "tech_support_impact.png"
+        plt.savefig(save_path)
+        logger.info(f"Saved tech support impact plot to {save_path}")
+
+    except Exception as e:
+        logger.error(f"Error generating tech support plot: {e}")
+        raise
