@@ -104,3 +104,24 @@ def get_payment_method_stats(db_manager: DatabaseManager, table_name: str) -> pd
     except Exception as e:
         logger.error(f"Error fetching payment method data: {e}")
         raise
+
+def get_tech_support_impact(db_manager: DatabaseManager, table_name: str) -> pd.DataFrame:
+    query = f"""
+    select 
+        TechSupport,
+        count(*) as Customer_Count,
+        sum(case when Churn = 'Yes' then 1 else 0 end) as Churned_Count,
+        round(sum(case when Churn = 'Yes' then 1 else 0 end) * 100.0 / count(*), 2) as Churn_Rate
+    from {table_name}
+    group by TechSupport
+    order by Churn_Rate desc;
+    """
+
+    try:
+        df = pd.read_sql_query(query, db_manager.conn)
+        logger.info("Retrieved tech support impact data.")
+        return df
+    
+    except Exception as e:
+        logger.error(f"Error fetching tech support data: {e}")
+        raise
