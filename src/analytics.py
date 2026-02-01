@@ -62,3 +62,24 @@ def get_senior_churn_rate(db_manager: DatabaseManager, table_name: str) -> pd.Da
     except sqlite3.Error as e:
         logger.error(f"Error fetching senior churn data: {e}")
         raise
+
+def get_internet_service_churn(db_manager: DatabaseManager, table_name: str) -> pd.DataFrame:
+    query = f"""
+    select 
+        InternetService,
+        count(*) as Total,
+        sum(case when Churn = 'Yes' then 1 else 0 end) as Churned_Count,
+        round(sum(case when Churn = 'Yes' then 1 else 0 end) * 100.0 / count(*), 2) as Churn_Rate
+    from {table_name}
+    group by InternetService
+    order by Churn_Rate desc;
+    """
+
+    try:
+        df = pd.read_sql_query(query, db_manager.conn)
+        logger.info("Retrieved internet service churn data.")
+        return df
+    
+    except sqlite3.Error as e:
+        logger.error(f"Error fetching internet service data: {e}")
+        raise
