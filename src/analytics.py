@@ -42,3 +42,23 @@ def get_monthly_charges_stats(db_manager: DatabaseManager, table_name: str) -> p
     except sqlite3.Error as e:
         logger.error(f"Query execution failed: {e}")
         raise
+
+def get_senior_churn_rate(db_manager: DatabaseManager, table_name: str) -> pd.DataFrame:
+    query = f"""
+    select 
+        case when SeniorCitizen = 1 then 'Senior' else 'Non-Senior' end as Age_Group,
+        count(*) as Total_Customers,
+        sum(case when Churn = 'Yes' then 1 else 0 end) as Churned_Count,
+        round(sum(case when Churn = 'Yes' then 1 else 0 end) * 100 / count(*), 2) as Churn_Rate
+    from {table_name}
+    group by SeniorCitizen;
+    """
+    
+    try:
+        df = pd.read_sql_query(query, db_manager.conn)
+        logger.info("Retrieved senior citizen churn analysis.")
+        return df
+    
+    except sqlite3.Error as e:
+        logger.error(f"Error fetching senior churn data: {e}")
+        raise
