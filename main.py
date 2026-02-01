@@ -2,11 +2,11 @@ import logging
 import sys
 from pathlib import Path
 from src.utils import get_config, ensure_dir
-from src.plotting import plot_charges_kde, plot_churn_by_contract
+from src.plotting import plot_charges_kde, plot_churn_by_contract, plot_senior_churn
 from src.logger_config import setup_logger
 from src.etl import extract, tranform, load
 from src.database import DatabaseManager
-from src.analytics import get_churn_stats, get_monthly_charges_stats
+from src.analytics import get_churn_stats, get_monthly_charges_stats, get_senior_churn_rate
 
 def main():
     db_manager = None
@@ -58,6 +58,9 @@ def main():
 
         df_charges = get_monthly_charges_stats(db_manager, table_name)
         plot_charges_kde(df_charges, config)
+
+        df_senior_churn = get_senior_churn_rate(db_manager, table_name)
+        plot_senior_churn(df_senior_churn, config)    
 
     except Exception as e:
         logger.critical(f"Failed analysis phase: {e}")
