@@ -2,11 +2,11 @@ import logging
 import sys
 from pathlib import Path
 from src.utils import get_config, ensure_dir
-from src.plotting import plot_charges_kde, plot_churn_by_contract, plot_senior_churn, plot_internet_service_churn, plot_payment_method
+from src.plotting import plot_charges_kde, plot_churn_by_contract, plot_senior_churn, plot_internet_service_churn, plot_payment_method, plot_tech_support_impact
 from src.logger_config import setup_logger
 from src.etl import extract, tranform, load
 from src.database import DatabaseManager
-from src.analytics import get_churn_stats, get_monthly_charges_stats, get_senior_churn_rate, get_internet_service_churn, get_payment_method_stats
+from src.analytics import get_churn_stats, get_monthly_charges_stats, get_senior_churn_rate, get_internet_service_churn, get_payment_method_stats, get_tech_support_impact
 
 def main():
     db_manager = None
@@ -67,6 +67,9 @@ def main():
 
         df_payment_method = get_payment_method_stats(db_manager, table_name)
         plot_payment_method(df_payment_method, config)
+
+        df_tech_support = get_tech_support_impact(db_manager, table_name)
+        plot_tech_support_impact(df_tech_support, config)
 
     except Exception as e:
         logger.critical(f"Failed analysis phase: {e}")
