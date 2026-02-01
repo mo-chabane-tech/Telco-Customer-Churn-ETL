@@ -59,3 +59,20 @@ def plot_senior_churn(df: pd.DataFrame, config: Dict[str, Any]) -> None:
     except Exception as e:
         logger.error(f"Error generating senior churn plot: {e}")
         raise
+
+def plot_internet_service_churn(df: pd.DataFrame, config: Dict[str, Any]) -> None:
+    try:
+        plt.figure(figsize=(10, 8))
+        sns.barplot(x="InternetService", y="Churn_Rate", data=df)
+
+        plt.title('Churn Rate by Internet Service')
+        plt.ylabel('Churn Rate (%)')
+        plt.xlabel('Internet Service')
+
+        save_path = Path(config['paths']['reports_dir']) / "internet_service_analysis.png"
+        plt.savefig(save_path, bbox_inches='tight')
+        logger.info(f"Saved internet service plot to {save_path}")
+
+    except Exception as e:
+        logger.error(f"Error generating internet service churn plot: {e}")
+        raise
