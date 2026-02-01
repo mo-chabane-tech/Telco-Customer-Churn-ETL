@@ -20,7 +20,7 @@ def plot_churn_by_contract(df: pd.DataFrame, config: Dict[str, Any]) -> None:
 
         save_path = Path(config["paths"]["reports_dir"]) / "churn_by_contract.png"
         plt.savefig(save_path)
-        logger.info(f"Saved churn analysis plot at {save_path}")
+        logger.info(f"Saved churn analysis plot to {save_path}")
 
     except Exception as e:
         logger.error(f"Error generating churn plot: {e}")
@@ -37,8 +37,25 @@ def plot_charges_kde(df: pd.DataFrame, config: Dict[str, Any]) -> None:
 
         save_path = Path(config["paths"]["reports_dir"]) / "charges_vs_tenure.png"
         plt.savefig(save_path)
-        logger.info(f"Saved churn analysis plot at {save_path}")
+        logger.info(f"Saved churn analysis plot to {save_path}")
 
     except Exception as e:
         logger.error(f"Error generating kde plot: {e}")
+        raise
+
+def plot_senior_churn(df: pd.DataFrame, config: Dict[str, Any]) -> None:
+    try:
+        plt.figure(figsize=(10, 8))
+        sns.barplot(x="Age_Group", y="Churn_Rate", data=df)
+
+        plt.title('Churn Rate: Senior Citizens vs Non-Seniors')
+        plt.ylabel('Churn Rate (%)')
+        plt.xlabel('Age Group')
+
+        save_path = Path(config['paths']['reports_dir']) / "senior_churn_rate.png"
+        plt.savefig(save_path, bbox_inches='tight')
+        logger.info(f"Saved senior citizen plot to {save_path}")
+
+    except Exception as e:
+        logger.error(f"Error generating senior churn plot: {e}")
         raise
