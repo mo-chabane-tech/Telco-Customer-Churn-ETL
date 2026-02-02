@@ -4,7 +4,7 @@ from pathlib import Path
 from src.utils import get_config, ensure_dir
 from src.plotting import plot_charges_kde, plot_churn_by_contract, plot_senior_churn, plot_internet_service_churn, plot_payment_method, plot_tech_support_impact
 from src.logger_config import setup_logger
-from src.etl import extract, tranform, load
+from src.etl import extract, transform, load
 from src.database import DatabaseManager
 from src.analytics import get_churn_stats, get_monthly_charges_stats, get_senior_churn_rate, get_internet_service_churn, get_payment_method_stats, get_tech_support_impact
 
@@ -43,7 +43,7 @@ def main():
 
     try:
         df = extract(Path(config["paths"]["data"]))
-        df_cleaned = tranform(df)
+        df_cleaned = transform(df)
         load(table_name, df_cleaned, db_manager)
         
     except Exception as e:

@@ -22,7 +22,7 @@ def extract(data_path: Path) -> pd.DataFrame:
         logger.error(f"Error extracting data: {e}")
         raise
 
-def tranform(df: pd.DataFrame) -> pd.DataFrame: 
+def transform(df: pd.DataFrame) -> pd.DataFrame: 
     try:
         df["TotalCharges"] = df["TotalCharges"].fillna(0)
         logger.info("Data Transformed successfully.")
